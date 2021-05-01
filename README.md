@@ -1,6 +1,22 @@
 # responsekit-nestjs-demo
 Demonstration of using `@responsekit/nestjs` in a nestjs application.
 
+After creating your nest project, install the following packages:
+
+```
+npm i @responsekit/core @responsekit/nestjs
+```
+
+To use the `CommandResultController` that the controllers in this demonstration extend, also install:
+
+```
+npm i @responsekit/express
+```
+
+In order to use `CommandResultService`, `@nestjs/cqrs` must also be installed.
+
+See [`@responsekit/nestjs` on github](https://github.com/IRCraziestTaxi/responsekit-nestjs) for usage instructions.
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
