@@ -1,17 +1,49 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { ResponsekitModule } from "@responsekit/nestjs";
 import { AppleModule } from "./apple/apple.module";
 import { OrangeModule } from "./orange/orange.module";
-import { ResponsekitModule } from "@responsekit/nestjs";
 
 @Module({
     imports: [
+        ResponsekitModule.forRoot(),
+        TypeOrmModule.forRootAsync({
+            imports: [
+                ConfigModule.forRoot({
+                    envFilePath: "ormconfig.env"
+                })
+            ],
+            inject: [
+                ConfigService
+            ],
+            useFactory: async (configService: ConfigService) => ({
+                type: configService.get("TYPEORM_CONNECTION"),
+                host: configService.get("TYPEORM_HOST"),
+                port: parseInt(configService.get("TYPEORM_PORT")),
+                database: configService.get("TYPEORM_DATABASE"),
+                username: configService.get("TYPEORM_USERNAME"),
+                password: configService.get("TYPEORM_PASSWORD"),
+                // Unfortunately this is necessary in order to use
+                // typeorm with a webpack build...
+                // Can omit this using autoLoadEntities: true
+                // and TypeOrmModule.forFeature in feature modules.
+                // entities: [
+                //     Apple,
+                //     Orange
+                // ],
+                // At runtime, ignore migrations.
+                migrations: [],
+                autoLoadEntities: true
+            } as TypeOrmModuleOptions)
+        }),
+        // Global option for LinqRepository of any entity. (Could not get to work.)
+        // LinqRepositoryModule.forRoot([Apple, Orange]),
+        // App modules.
         AppleModule,
-        OrangeModule,
-        ResponsekitModule.forRoot()
+        OrangeModule
     ],
-    controllers: [AppController],
-    providers: [AppService]
+    controllers: [],
+    providers: []
 })
 export class AppModule {}
