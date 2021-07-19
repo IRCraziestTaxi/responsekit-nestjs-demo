@@ -1,37 +1,29 @@
-import { Body, Controller, Get, Post, Query, Res } from "@nestjs/common";
-import { CommandResultController } from "@responsekit/express";
+import { Body, Controller, Get, Post, Query } from "@nestjs/common";
+import { GenericResponse } from "@responsekit/core";
 import { CommandResultService } from "@responsekit/nestjs";
-import { Response } from "express";
+import { Apple } from "./apple.entity";
 import { AddAppleCommand } from "./commands/add-apple/add-apple.command";
 import { GetApplesQuery } from "./queries/get-apples/get-apples.query";
 
 @Controller("apples")
-export class AppleController extends CommandResultController {
-    public constructor(private readonly _service: CommandResultService) {
-        super();
-    }
+export class AppleController {
+    public constructor(private readonly _service: CommandResultService) { }
 
     @Post()
     public async addApple(
-        @Body()
-            command: AddAppleCommand,
-        @Res()
-            response: Response
-    ): Promise<Response> {
+        @Body() command: AddAppleCommand
+    ): Promise<GenericResponse<string>> {
         const addResult = await this._service.send(command);
 
-        return this.sendResponse(addResult, response);
+        return addResult as GenericResponse<string>;
     }
 
     @Get()
     public async getApples(
-        @Query()
-            query: GetApplesQuery,
-        @Res()
-            response: Response
-    ): Promise<Response> {
+        @Query() query: GetApplesQuery
+    ): Promise<GenericResponse<Apple[]>> {
         const getResult = await this._service.query(query);
 
-        return this.sendResponse(getResult, response);
+        return getResult as GenericResponse<Apple[]>;
     }
 }

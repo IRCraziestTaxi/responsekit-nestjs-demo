@@ -7,12 +7,6 @@ After creating your nest project, install the following packages:
 npm i @responsekit/core @responsekit/nestjs
 ```
 
-To use the `CommandResultController` that the controllers in this demonstration extend, also install:
-
-```
-npm i @responsekit/express
-```
-
 In order to use `CommandResultService`, `@nestjs/cqrs` must also be installed.
 
 See [`@responsekit/nestjs` on github](https://github.com/IRCraziestTaxi/responsekit-nestjs) for usage instructions.

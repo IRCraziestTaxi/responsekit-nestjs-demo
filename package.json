@@ -31,7 +31,6 @@
     "@nestjs/platform-express": "^8.0.2",
     "@nestjs/typeorm": "^8.0.1",
     "@responsekit/core": "^1.0.1",
-    "@responsekit/express": "^1.0.0",
     "@responsekit/nestjs": "^1.0.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",

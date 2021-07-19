@@ -8,23 +8,18 @@ import { AddAppleCommand } from "./add-apple.command";
 @CommandHandler(AddAppleCommand)
 export class AddAppleHandler implements ICommandHandler<AddAppleCommand> {
     public async execute(command: AddAppleCommand): Promise<CommandResult<string>> {
-        try {
-            if (command.weight > 10) {
-                throw Rejection.BadRequest("This apple is too big!");
-            }
-
-            const mapper = new Mapper();
-            const addApple = mapper.map(command, new Apple());
-
-            const appleRepository = new LinqRepository(Apple);
-            const addedApple = await appleRepository.create(addApple);
-
-            return new GenericResponse({
-                value: `This apple weighs ${addedApple.weight} pounds and has an ID of ${addedApple.id}.`
-            });
+        if (command.weight > 10) {
+            throw Rejection.BadRequest("This apple is too big!");
         }
-        catch (error) {
-            return new Rejection(error);
-        }
+
+        const mapper = new Mapper();
+        const addApple = mapper.map(command, new Apple());
+
+        const appleRepository = new LinqRepository(Apple);
+        const addedApple = await appleRepository.create(addApple);
+
+        return new GenericResponse({
+            value: `This apple weighs ${addedApple.weight} pounds and has an ID of ${addedApple.id}.`
+        });
     }
 }
