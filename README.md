@@ -61,7 +61,7 @@ Migrations are managed easily by using the following scripts in `package.json`:
 "typeorm:registered": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm"
 ```
 
-To create a migration use:
+To create a migration, use:
 
 ```
 npm run mig:make -- -n MigrationName
