@@ -9,6 +9,74 @@ npm i @responsekit/core @responsekit/nestjs
 
 In order to use `CommandResultService`, `@nestjs/cqrs` must also be installed.
 
+## Demonstrations
+This project demonstrates the usage of `@responsekit/core` and `@responsekit/nestjs` in a NestJS application as well as injectable repositories extending `typeorm-linq-repository`'s `LinqRepository`.
+
+Note that the working approach is using repositories local to each entity's module along with `autoLoadEntities: true` in the TypeORM connection factory and `TypeOrmModule.forFeature` in each entity's module alongside the repository being provided in the `providers` array of the entity's module.
+
+However, in an application where repositories external to an entity's module are frequently used, rather than importing external entities into an entity's module, including those entities in `TypeOrmModule.forFeature` for that entity's module, and providing those entities' repositories in the `providers` array for that entity's module, you can also use the approach demonstrated by the `DomainModule`, which would provide each repository globally, removing the need for `TypeOrmModule.forFeature` and providing repositories in the `providers` array for entity modules. To use this approach, you also need to import entities in the TypeORM connection factory rather than using `autoLoadEntities: true`.
+
+Example:
+
+```ts
+@Module({
+    imports: [
+        // ...
+        TypeOrmModule.forRootAsync({
+            imports: [
+                ConfigModule.forRoot({
+                    envFilePath: "ormconfig.env"
+                })
+            ],
+            inject: [
+                ConfigService
+            ],
+            useFactory: async (configService: ConfigService) => ({
+                // ...
+                // To provide repositories globally with DomainModule,
+                // provide entities globally this way rather than using
+                // autoLoadEntities: true and TypeOrmModule.forFeature.
+                entities: [
+                    Apple,
+                    Orange
+                ],
+                // ...
+            } as TypeOrmModuleOptions)
+        }),
+        // ...
+    ],
+    controllers: [],
+    providers: []
+})
+export class AppModule { }
+```
+
+## Migrations
+Migrations are managed easily by using the following scripts in `package.json`:
+
+```
+"mig:make": "npm run typeorm:registered -- migration:generate",
+"mig:revert": "npm run typeorm:registered migration:revert",
+"mig:run": "npm run typeorm:registered migration:run",
+"typeorm:registered": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm"
+```
+
+To create a migration use:
+
+```
+npm run mig:make -- -n MigrationName
+```
+
+or, for a yarn project:
+
+```
+yarn mig:make -n MigrationName
+```
+
+To run pending migrations against a database, use the `mig:run` command. To revert one migration at a time, use the `mig:revert` command.
+
+## Original NestJS README contents
+
 See [`@responsekit/nestjs` on github](https://github.com/IRCraziestTaxi/responsekit-nestjs) for usage instructions.
 
 <p align="center">
