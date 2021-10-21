@@ -1,21 +1,15 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { CommandResult, GenericResponse } from "@responsekit/core";
-import { LinqRepository } from "typeorm-linq-repository";
 import { Orange } from "../../orange.entity";
+import { OrangeRepository } from "../../orange.repository";
 import { GetOrangesQuery } from "./get-oranges.query";
 
 @QueryHandler(GetOrangesQuery)
 export class GetOrangesHandler implements IQueryHandler<GetOrangesQuery> {
-    // public constructor(
-    //     @Inject(Orange)
-    //     private readonly _orangeRepository: LinqRepository<Orange>
-    // ) {
-    // }
+    public constructor(private readonly _orangeRepository: OrangeRepository) { }
 
     public async execute(query: GetOrangesQuery): Promise<CommandResult<Orange[]>> {
-        const orangeRepository = new LinqRepository(Orange);
-        // const orangesQuery = this._orangeRepository.getAll();
-        const orangesQuery = orangeRepository.getAll();
+        const orangesQuery = this._orangeRepository.getAll();
 
         const count = await orangesQuery.count();
 

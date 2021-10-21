@@ -1,21 +1,15 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { CommandResult, GenericResponse } from "@responsekit/core";
-import { LinqRepository } from "typeorm-linq-repository";
 import { Apple } from "../../apple.entity";
+import { AppleRepository } from "../../apple.repository";
 import { GetApplesQuery } from "./get-apples.query";
 
 @QueryHandler(GetApplesQuery)
 export class GetApplesHandler implements IQueryHandler<GetApplesQuery> {
-    // public constructor(
-    //     @Inject(Apple)
-    //     private readonly _appleRepository: LinqRepository<Apple>
-    // ) {
-    // }
+    public constructor(private readonly _appleRepository: AppleRepository) { }
 
     public async execute(query: GetApplesQuery): Promise<CommandResult<Apple[]>> {
-        const appleRepository = new LinqRepository(Apple);
-        // const applesQuery = this._appleRepository.getAll();
-        const applesQuery = appleRepository.getAll();
+        const applesQuery = this._appleRepository.getAll();
 
         const count = await applesQuery.count();
 

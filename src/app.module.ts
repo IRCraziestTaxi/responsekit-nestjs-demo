@@ -37,8 +37,6 @@ import { OrangeModule } from "./orange/orange.module";
                 autoLoadEntities: true
             } as TypeOrmModuleOptions)
         }),
-        // Global option for LinqRepository of any entity. (Could not get to work.)
-        // LinqRepositoryModule.forRoot([Apple, Orange]),
         // App modules.
         AppleModule,
         OrangeModule

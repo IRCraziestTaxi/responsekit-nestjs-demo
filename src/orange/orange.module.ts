@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AddOrangeHandler } from "./commands/add-orange/add-orange.handler";
 import { OrangeController } from "./orange.controller";
 import { Orange } from "./orange.entity";
+import { OrangeRepository } from "./orange.repository";
 import { GetOrangesHandler } from "./queries/get-oranges/get-oranges.handler";
 
 @Module({
@@ -11,10 +12,9 @@ import { GetOrangesHandler } from "./queries/get-oranges/get-oranges.handler";
     imports: [
         CqrsModule,
         TypeOrmModule.forFeature([Orange])
-        // Scoped option for LinqRepository for Orange. (Could not get to work.)
-        // LinqRepositoryModule.forFeature([Orange])
     ],
     providers: [
+        OrangeRepository,
         // Command handlers.
         AddOrangeHandler,
         // Query handlers.
