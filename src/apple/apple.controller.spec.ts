@@ -1,4 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { ResponsekitModule } from "@responsekit/nestjs";
 import { AppleController } from "./apple.controller";
 
 describe("AppleController", () => {
@@ -6,6 +7,9 @@ describe("AppleController", () => {
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
+            imports: [
+                ResponsekitModule.forRoot()
+            ],
             controllers: [AppleController]
         }).compile();
 

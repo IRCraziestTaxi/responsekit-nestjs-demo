@@ -18,7 +18,28 @@ However, in an application where repositories external to an entity's module are
 
 Example:
 
+`typeorm.config.ts`
 ```ts
+import { TypeormConfig } from "./interfaces";
+
+export const typeormConfig = (): TypeormConfig => ({
+    options: {
+          // ...
+          // To provide repositories globally with DomainModule,
+          // provide entities globally this way rather than using
+          // autoLoadEntities: true and TypeOrmModule.forFeature.
+          entities: [
+              Apple,
+              Orange
+          ],
+          // ...
+    }
+});
+```
+
+```ts
+import { typeormConfig } from "@app/domain/config";
+
 @Module({
     imports: [
         // ...
@@ -31,17 +52,9 @@ Example:
             inject: [
                 ConfigService
             ],
-            useFactory: async (configService: ConfigService) => ({
-                // ...
-                // To provide repositories globally with DomainModule,
-                // provide entities globally this way rather than using
-                // autoLoadEntities: true and TypeOrmModule.forFeature.
-                entities: [
-                    Apple,
-                    Orange
-                ],
-                // ...
-            } as TypeOrmModuleOptions)
+            useFactory: async () => ({
+                ...typeormConfig().options
+            })
         }),
         // ...
     ],
