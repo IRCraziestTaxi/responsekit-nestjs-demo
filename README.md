@@ -77,13 +77,13 @@ Migrations are managed easily by using the following scripts in `package.json`:
 To create a migration, use:
 
 ```
-npm run mig:make -- -n MigrationName
+npm run mig:make -- MigrationName
 ```
 
 or, for a yarn project:
 
 ```
-yarn mig:make -n MigrationName
+yarn mig:make MigrationName
 ```
 
 To run pending migrations against a database, use the `mig:run` command. To revert one migration at a time, use the `mig:revert` command.
